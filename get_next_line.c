@@ -6,7 +6,7 @@
 /*   By: gmunoz <gmunoz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 12:56:32 by gmunoz            #+#    #+#             */
-/*   Updated: 2023/10/20 17:39:57 by gmunoz           ###   ########.fr       */
+/*   Updated: 2023/10/23 17:22:05 by gmunoz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*txt_split(int fd, char *buffer, char *backup)
 	{
 		byte_nb = read(fd, buffer, BUFFER_SIZE);
 		if (byte_nb == -1)
-			return (0);
+			return (NULL);
 		if (byte_nb == 0)
 			break ;
 		buffer[byte_nb] = '\0';
@@ -30,7 +30,8 @@ static char	*txt_split(int fd, char *buffer, char *backup)
 			backup = ft_strdup("");
 		temp = backup;
 		backup = ft_strjoin(temp, buffer);
-		temp = 0;
+		free(temp);
+		temp = NULL;
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
@@ -48,8 +49,11 @@ static char	*leftovers(char *temp)
 	if (temp[i] == 0 || temp[1] == 0)
 		return (0);
 	backup = ft_substr(temp, i + 1, ft_strlen(temp) - i);
-	if (!backup)
-		backup = 0;
+	if (*backup == '\0')
+	{
+		free(backup);
+		backup = NULL;
+	}
 	return (backup);
 }
 
@@ -62,10 +66,10 @@ static char	*extract(char *newstr)
 	while (newstr[i] != 0 && newstr[i] != '\n')
 		i++;
 	final_str = ft_substr(newstr, 0, i + 1);
-	if (!final_str)
+	if (*final_str == '\0')
 	{
 		free(final_str);
-		final_str = 0;
+		final_str = NULL;
 	}
 	return (final_str);
 }
@@ -76,9 +80,7 @@ char	*get_next_line(int fd)
 	char		*temp;
 	char		*buffer;
 	static char	*backup;
-	int			i;
 
-	i = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
@@ -86,13 +88,20 @@ char	*get_next_line(int fd)
 		return (0);
 	newstr = txt_split(fd, buffer, backup);
 	free(buffer);
-	buffer = 0;
+	buffer = NULL;
 	if (!newstr)
-		return (0);
+	{
+		free(backup);
+		backup = NULL;
+		return (NULL);
+	}
 	temp = newstr;
 	backup = leftovers(temp);
 	if (backup != 0)
+	{
 		newstr = extract(newstr);
-	temp = 0;
+		free(temp);
+		temp = NULL;
+	}
 	return (newstr);
 }

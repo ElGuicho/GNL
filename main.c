@@ -6,7 +6,7 @@
 /*   By: gmunoz <gmunoz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 13:17:15 by gmunoz            #+#    #+#             */
-/*   Updated: 2023/10/20 18:01:16 by gmunoz           ###   ########.fr       */
+/*   Updated: 2023/10/23 13:55:14 by gmunoz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ int	main(int ac, char **av)
 	}
 	close(fd);
 	printf("end of file");
+	system("leaks a.out");
 	return (0);
 }

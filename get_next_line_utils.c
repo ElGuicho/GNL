@@ -6,7 +6,7 @@
 /*   By: gmunoz <gmunoz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 12:56:55 by gmunoz            #+#    #+#             */
-/*   Updated: 2023/10/20 16:50:14 by gmunoz           ###   ########.fr       */
+/*   Updated: 2023/10/23 19:05:11 by gmunoz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,18 @@
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
-	size_t	j;
 	char	*str;
 
-	str = (char *)malloc(sizeof(*s) * (len + 1));
+	str = (char *)malloc(len + 1);
 	if (!str)
 		return (0);
 	i = 0;
-	j = 0;
-	while (s[i])
+	while (s[i] != '\0' && i < len)
 	{
-		if (i >= start && j < len)
-		{
-			str[j] = s[i];
-			j++;
-		}
+		str[i] = s[start + i];
 		i++;
 	}
-	str[j] = 0;
+	str[i] = '\0';
 	return (str);
 }
 
@@ -41,6 +35,8 @@ int	ft_strlen(const char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 		i++;
 	return (i);
@@ -81,7 +77,11 @@ char	*ft_strdup(const char *s1)
 		count++;
 	cpy = (char *)malloc(count + 1);
 	if (!cpy)
+	{
+		free(cpy);
+		cpy = NULL;
 		return (NULL);
+	}
 	while (i < count + 1)
 	{
 		cpy[i] = s1[i];
@@ -103,7 +103,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (s1[i] != '\0')
+	while (s1 != 0 && s1[i] != '\0')
 	{
 		newstr[i] = s1[i];
 		i++;
