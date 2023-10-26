@@ -6,7 +6,7 @@
 /*   By: gmunoz <gmunoz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 12:56:55 by gmunoz            #+#    #+#             */
-/*   Updated: 2023/10/23 19:05:11 by gmunoz           ###   ########.fr       */
+/*   Updated: 2023/10/24 18:38:20 by gmunoz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t	i;
 	char	*str;
 
+	if (!s)
+		return (0);
+	//printf("len: %zu, start: %u\n", len, start);
 	str = (char *)malloc(len + 1);
 	if (!str)
 		return (0);
