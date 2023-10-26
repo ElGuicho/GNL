@@ -6,7 +6,7 @@
 /*   By: gmunoz <gmunoz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 12:56:32 by gmunoz            #+#    #+#             */
-/*   Updated: 2023/10/23 17:22:05 by gmunoz           ###   ########.fr       */
+/*   Updated: 2023/10/24 18:40:20 by gmunoz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ static char	*leftovers(char *temp)
 		i++;
 	if (temp[i] == 0 || temp[1] == 0)
 		return (0);
-	backup = ft_substr(temp, i + 1, ft_strlen(temp) - i);
+	if (temp[0] != '\n')
+		backup = ft_substr(temp, i + 1, ft_strlen(temp) - i);
+	else
+		backup = ft_substr(temp, i + 1, ft_strlen(temp) - i - 1);
 	if (*backup == '\0')
 	{
 		free(backup);
@@ -81,8 +84,8 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	static char	*backup;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+		return (free(backup), backup = NULL, NULL);
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (0);
