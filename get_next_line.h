@@ -6,7 +6,7 @@
 /*   By: gmunoz <gmunoz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 12:57:11 by gmunoz            #+#    #+#             */
-/*   Updated: 2023/10/20 15:42:29 by gmunoz           ###   ########.fr       */
+/*   Updated: 2023/10/27 13:58:37 by gmunoz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+void	*ft_calloc(size_t count, size_t size);
+char	*ft_substr(char *s, unsigned int start, size_t len);
 int		ft_strlen(const char *str);
 char	*ft_strchr(const char *s, int i);
 char	*ft_strdup(const char *s);
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin(char *s1, char *s2);
 char	*get_next_line(int fd);
 
 #endif

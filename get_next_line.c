@@ -6,7 +6,7 @@
 /*   By: gmunoz <gmunoz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 12:56:32 by gmunoz            #+#    #+#             */
-/*   Updated: 2023/10/24 18:40:20 by gmunoz           ###   ########.fr       */
+/*   Updated: 2023/10/27 17:47:04 by gmunoz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,10 @@ static char	*txt_split(int fd, char *buffer, char *backup)
 		if (byte_nb == 0)
 			break ;
 		buffer[byte_nb] = '\0';
-		if (!backup)
-			backup = ft_strdup("");
 		temp = backup;
 		backup = ft_strjoin(temp, buffer);
-		free(temp);
+		if (!backup)
+			return (temp = NULL, NULL);
 		temp = NULL;
 		if (ft_strchr(buffer, '\n'))
 			break ;
@@ -44,19 +43,21 @@ static char	*leftovers(char *temp)
 	char	*backup;
 
 	i = 0;
-	while (temp[i] != 0 && temp[i] != '\n')
+	while (temp[i] != '\0' && temp[i] != '\n')
 		i++;
-	if (temp[i] == 0 || temp[1] == 0)
-		return (0);
-	if (temp[0] != '\n')
-		backup = ft_substr(temp, i + 1, ft_strlen(temp) - i);
-	else
-		backup = ft_substr(temp, i + 1, ft_strlen(temp) - i - 1);
-	if (*backup == '\0')
+	if (temp[i] == '\n')
+		i++;
+	if (temp[i] == 0)
 	{
-		free(backup);
-		backup = NULL;
+		backup = ft_calloc(2, 1);
+		if (!backup)
+			return (NULL);
+		backup[0] = '&';
+		return (backup);
 	}
+	backup = ft_substr(temp, i, ft_strlen(temp) - i);
+	if (!backup)
+		return (NULL);
 	return (backup);
 }
 
@@ -69,6 +70,8 @@ static char	*extract(char *newstr)
 	while (newstr[i] != 0 && newstr[i] != '\n')
 		i++;
 	final_str = ft_substr(newstr, 0, i + 1);
+	if (!final_str)
+		return (NULL);
 	if (*final_str == '\0')
 	{
 		free(final_str);
@@ -84,27 +87,37 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	static char	*backup;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE < 0)
 		return (free(backup), backup = NULL, NULL);
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
-		return (0);
+		return (free(backup), backup = NULL, NULL);
 	newstr = txt_split(fd, buffer, backup);
 	free(buffer);
 	buffer = NULL;
 	if (!newstr)
+		return (backup = NULL, NULL);
+	temp = newstr;
+	backup = leftovers(temp);
+	if (!backup)
 	{
 		free(backup);
 		backup = NULL;
-		return (NULL);
+		return (free(temp), temp = NULL, NULL);
 	}
-	temp = newstr;
-	backup = leftovers(temp);
-	if (backup != 0)
+	else if (backup[0] == '&')
 	{
-		newstr = extract(newstr);
+		free(backup);
+		backup = NULL;
+	}
+	else if (backup != 0)
+	{
+		newstr = NULL;
+		newstr = extract(temp);
 		free(temp);
 		temp = NULL;
+		if (!newstr)
+			return (free(backup), backup = NULL, NULL);
 	}
 	return (newstr);
 }
