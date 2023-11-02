@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gmunoz <gmunoz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/09 12:57:11 by gmunoz            #+#    #+#             */
-/*   Updated: 2023/11/02 14:19:50 by gmunoz           ###   ########.fr       */
+/*   Created: 2023/11/02 13:07:06 by gmunoz            #+#    #+#             */
+/*   Updated: 2023/11/02 14:19:55 by gmunoz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -21,6 +21,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <limits.h>
 
 void	*ft_calloc(int count, int size);
 int		ft_strlen(const char *str);

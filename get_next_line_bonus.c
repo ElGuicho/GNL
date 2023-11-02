@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gmunoz <gmunoz@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/09 12:56:32 by gmunoz            #+#    #+#             */
-/*   Updated: 2023/11/02 14:09:04 by gmunoz           ###   ########.fr       */
+/*   Created: 2023/11/02 13:06:22 by gmunoz            #+#    #+#             */
+/*   Updated: 2023/11/02 14:20:10 by gmunoz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*txt_split(int fd, char *buffer, char *backup)
 {
@@ -104,15 +104,15 @@ char	*get_next_line(int fd)
 	char		*newstr;
 	char		*final_str;
 	char		*buffer;
-	static char	*backup;
+	static char	*backup[OPEN_MAX];
 
 	if (fd < 0 || BUFFER_SIZE < 0)
-		return (free(backup), backup = NULL, NULL);
+		return (free(backup[fd]), backup[fd] = NULL, NULL);
 	buffer = (char *)ft_calloc(BUFFER_SIZE + 1, 1);
 	if (!buffer)
-		return (free(backup), backup = NULL, NULL);
-	newstr = txt_split(fd, buffer, backup);
-	backup = NULL;
+		return (free(backup[fd]), backup[fd] = NULL, NULL);
+	newstr = txt_split(fd, buffer, backup[fd]);
+	backup[fd] = NULL;
 	free(buffer);
 	if (!newstr)
 		return (NULL);
@@ -121,8 +121,8 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (if_leftovers(newstr) == 0)
 		return (free(newstr), final_str);
-	backup = leftovers(newstr);
-	if (!backup)
+	backup[fd] = leftovers(newstr);
+	if (!backup[fd])
 		return (free(final_str), NULL);
 	return (final_str);
 }
